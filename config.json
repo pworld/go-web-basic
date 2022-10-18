@@ -1,0 +1,9 @@
+{
+    "logging" : {
+        "level": "debug"
+    },
+    "main" : {
+        "message" : "Hello from the config.json file"
+    },
+    "version" : 1.0
+}

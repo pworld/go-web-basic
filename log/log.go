@@ -9,7 +9,7 @@ const (
 	Info
 	Warn
 	Fatal
-	none
+	None
 )
 
 // Interface for different level severity

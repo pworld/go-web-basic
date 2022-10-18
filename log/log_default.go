@@ -1,11 +1,19 @@
 package log
 
 import (
+	"go-web-platform/config"
 	"log"
 	"os"
+	"strings"
 )
 
-func NewDefaultLog(level LevelLogging) DataLogger {
+func NewDefaultLog(cfg config.Config) DataLogger {
+
+	var level = Debug
+	if configLevelString, found := cfg.GetString("logging:level"); found {
+		level = LogLevelFromString(configLevelString)
+	}
+
 	flags := log.Lmsgprefix | log.Ltime
 
 	return &DefaultLog{
@@ -19,4 +27,22 @@ func NewDefaultLog(level LevelLogging) DataLogger {
 		},
 		triggerPanic: true,
 	}
+}
+
+func LogLevelFromString(val string) (level LevelLogging) {
+	switch strings.ToLower(val) {
+	case "debug":
+		level = Debug
+	case "information":
+		level = Info
+	case "warning":
+		level = Warn
+	case "fatal":
+		level = Fatal
+	case "none":
+		level = None
+	default:
+		level = Debug
+	}
+	return
 }
