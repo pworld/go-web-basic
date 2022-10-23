@@ -3,12 +3,13 @@ package main
 import (
 	"go-web-platform/config"
 	"go-web-platform/log"
+	"go-web-platform/services"
 )
 
 func writeMessage(logger log.DataLogger, cfg config.Config) {
-	nested, ok := cfg.GetNested("main")
+	section, ok := cfg.GetNested("main")
 	if ok {
-		message, ok := nested.GetString("message")
+		message, ok := section.GetString("message")
 		if ok {
 			logger.Info(message)
 		} else {
@@ -20,13 +21,20 @@ func writeMessage(logger log.DataLogger, cfg config.Config) {
 }
 
 func main() {
-	var cfg config.Config
-	var err error
-	cfg, err = config.Load("config.json")
+	services.RegisterDefaultServices()
+	_, err := services.CallFunc(writeMessage)
 	if err != nil {
-		panic(err)
+		return
 	}
-
-	var logger = log.NewDefaultLog(cfg)
-	writeMessage(logger, cfg)
+	val := struct {
+		message string
+		log.DataLogger
+	}{
+		message: "Hello from the struct",
+	}
+	errPop := services.Populate(&val)
+	if errPop != nil {
+		return
+	}
+	val.DataLogger.Debug(val.message)
 }
