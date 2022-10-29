@@ -10,7 +10,7 @@ func RegisterDefaultServices() {
 
 	// Creates Config Services
 	err := RegisterSingleton(func() (c config.Config) {
-		_, loadErr := config.Load("config.json")
+		c, loadErr := config.Load("config.json")
 		if loadErr != nil {
 			panic(loadErr)
 		}
