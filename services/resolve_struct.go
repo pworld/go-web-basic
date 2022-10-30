@@ -10,27 +10,34 @@ func Populate(target interface{}) error {
 	return PopulateForContext(context.Background(), target)
 }
 func PopulateForContext(c context.Context, target interface{}) (err error) {
-	return PopulateForContextWithExtras(c, target,
+	return PopulateForContextWithAddVars(c, target,
 		make(map[reflect.Type]reflect.Value))
 }
-func PopulateForContextWithExtras(c context.Context, target interface{},
-	extras map[reflect.Type]reflect.Value) (err error) {
+
+func PopulateForContextWithAddVars(c context.Context, target interface{},
+	addVars map[reflect.Type]reflect.Value) (err error) {
 	targetValue := reflect.ValueOf(target)
-	if targetValue.Kind() == reflect.Ptr &&
-		targetValue.Elem().Kind() == reflect.Struct {
+
+	// Any fields type is not an interface or there is no service are skipped.
+	if targetValue.Kind() == reflect.Ptr && targetValue.Elem().Kind() == reflect.Struct {
 		targetValue = targetValue.Elem()
+
 		for i := 0; i < targetValue.Type().NumField(); i++ {
 			fieldVal := targetValue.Field(i)
 			if fieldVal.CanSet() {
-				if extra, ok := extras[fieldVal.Type()]; ok {
+				if extra, ok := addVars[fieldVal.Type()]; ok {
 					fieldVal.Set(extra)
 				} else {
-					resolveServiceValue(c, fieldVal.Addr())
+					err := resolveServiceValue(c, fieldVal.Addr())
+					if err != nil {
+						return err
+					}
 				}
 			}
 		}
+
 	} else {
-		err = errors.New("Type cannot be used as target")
+		err = errors.New("type cannot be used as target")
 	}
 	return
 }

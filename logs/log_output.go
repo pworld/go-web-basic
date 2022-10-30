@@ -1,11 +1,11 @@
-package log
+package logs
 
 import (
 	"fmt"
 	"log"
 )
 
-// DefaultLog Implement Log interface using the features provided by the log package in the standard library
+// DefaultLog Implement Log interface using the features provided by the logs package in the standard library
 type DefaultLog struct {
 	minLevel     LevelLogging
 	loggers      map[LevelLogging]*log.Logger
@@ -18,7 +18,10 @@ func (l *DefaultLog) MinLogLevel() LevelLogging {
 
 func (l *DefaultLog) write(level LevelLogging, message string) {
 	if l.minLevel <= level {
-		l.loggers[level].Output(2, message)
+		err := l.loggers[level].Output(2, message)
+		if err != nil {
+			return
+		}
 	}
 }
 

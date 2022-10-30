@@ -1,4 +1,4 @@
-package log
+package logs
 
 import (
 	"go-web-platform/config"

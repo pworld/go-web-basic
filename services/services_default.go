@@ -2,7 +2,7 @@ package services
 
 import (
 	"go-web-platform/config"
-	"go-web-platform/log"
+	"go-web-platform/logs"
 )
 
 // Register Services here using Dependency Injection Method
@@ -18,8 +18,8 @@ func RegisterDefaultServices() {
 	})
 
 	// Creates Log Services
-	err = RegisterSingleton(func(appConfig config.Config) log.DataLogger {
-		return log.NewDefaultLog(appConfig)
+	err = RegisterSingleton(func(appConfig config.Config) logs.DataLogger {
+		return logs.NewDefaultLog(appConfig)
 	})
 	if err != nil {
 		panic(err)

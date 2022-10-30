@@ -2,11 +2,11 @@ package main
 
 import (
 	"go-web-platform/config"
-	"go-web-platform/log"
+	"go-web-platform/logs"
 	"go-web-platform/services"
 )
 
-func writeMessage(logger log.DataLogger, cfg config.Config) {
+func writeMessage(logger logs.DataLogger, cfg config.Config) {
 	section, ok := cfg.GetNested("main")
 	if ok {
 		message, ok := section.GetString("message")
@@ -28,7 +28,7 @@ func main() {
 	}
 	val := struct {
 		message string
-		log.DataLogger
+		logs.DataLogger
 	}{
 		message: "Hello from the struct",
 	}
