@@ -19,6 +19,11 @@ func (m *ComponentContext) GetError() error {
 
 type MiddlewareComponent interface {
 	Init()
-
 	ProcessRequest(context *ComponentContext, next func(*ComponentContext))
+}
+
+// Func for components to indicate they require services using reflect
+type ServicesMiddlwareComponent interface {
+	Init()
+	ImplementsProcessRequestWithServices()
 }

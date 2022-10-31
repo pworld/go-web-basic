@@ -1,4 +1,4 @@
-package standard
+package basic
 
 import (
 	"go-web-platform/logs"
@@ -25,15 +25,28 @@ func (w *LogResWriter) Write(b []byte) (int, error) {
 
 type LoggingComponent struct{}
 
+func (lc *LoggingComponent) ImplementsProcessRequestWithServices() {}
+
 func (lc *LoggingComponent) Init() {}
+
 func (lc *LoggingComponent) ProcessRequest(ctx *middleware.ComponentContext,
 	next func(*middleware.ComponentContext)) {
-	var logger logs.DataLogger
+	var logger logs.Logger
 	err := services.GetServiceContext(ctx.Request.Context(), &logger)
 	if err != nil {
 		ctx.Error(err)
 		return
 	}
+	loggingWriter := LogResWriter{0, ctx.ResponseWriter}
+	ctx.ResponseWriter = &loggingWriter
+	logger.Infof("REQ --- %v - %v", ctx.Request.Method, ctx.Request.URL)
+	next(ctx)
+	logger.Infof("RSP %v %v", loggingWriter.statusCode, ctx.Request.URL)
+}
+
+func (lc *LoggingComponent) ProcessRequestWithServices(ctx *middleware.ComponentContext,
+	next func(*middleware.ComponentContext), logger logs.Logger) {
+
 	loggingWriter := LogResWriter{0, ctx.ResponseWriter}
 	ctx.ResponseWriter = &loggingWriter
 	logger.Infof("REQ --- %v - %v", ctx.Request.Method, ctx.Request.URL)

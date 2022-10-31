@@ -1,4 +1,4 @@
-package standard
+package basic
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 
 type ErrorComponent struct{}
 
-func recoveryFunc(ctx *middleware.ComponentContext, logger logs.DataLogger) {
+func recoveryFunc(ctx *middleware.ComponentContext, logger logs.Logger) {
 	if arg := recover(); arg != nil {
 		logger.Debugf("Error: %v", fmt.Sprint(arg))
 		ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
@@ -21,7 +21,7 @@ func recoveryFunc(ctx *middleware.ComponentContext, logger logs.DataLogger) {
 func (c *ErrorComponent) Init() {}
 func (c *ErrorComponent) ProcessRequest(ctx *middleware.ComponentContext,
 	next func(*middleware.ComponentContext)) {
-	var logger logs.DataLogger
+	var logger logs.Logger
 	err := services.GetServiceContext(ctx.Context(), &logger)
 	if err != nil {
 		return

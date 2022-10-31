@@ -1,4 +1,4 @@
-package standard
+package basic
 
 import (
 	"go-web-platform/middleware"
@@ -10,7 +10,7 @@ type ServicesComponent struct{}
 func (c *ServicesComponent) Init() {}
 
 // The http.Request.Context method is used to get the
-// standard Context created with the request, which is prepared for services and then updated using the
+// basic Context created with the request, which is prepared for services and then updated using the
 // WithContext method
 func (c *ServicesComponent) ProcessRequest(ctx *middleware.ComponentContext,
 	next func(*middleware.ComponentContext)) {
@@ -18,7 +18,7 @@ func (c *ServicesComponent) ProcessRequest(ctx *middleware.ComponentContext,
 	ctx.Request.WithContext(services.NewServiceContext(reqContext))
 
 	//The http.Request.Context method is used to get the
-	//standard Context created with the request, which is prepared for services and then updated using the
+	//basic Context created with the request, which is prepared for services and then updated using the
 	//WithContext method
 	next(ctx)
 }

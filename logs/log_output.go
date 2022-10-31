@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-// DefaultLog Implement Log interface using the features provided by the logs package in the standard library
+// DefaultLog Implement Log interface using the features provided by the logs package in the basic library
 type DefaultLog struct {
 	minLevel     LevelLogging
 	loggers      map[LevelLogging]*log.Logger

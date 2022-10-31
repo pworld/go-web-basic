@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func NewDefaultLog(cfg config.Config) DataLogger {
+func NewDefaultLog(cfg config.Config) Logger {
 
 	var level = Debug
 	if configLevelString, found := cfg.GetString("logging:level"); found {

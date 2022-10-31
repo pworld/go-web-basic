@@ -5,5 +5,8 @@
     "main" : {
         "message" : "Hello from the config.json file"
     },
+    "files": {
+        "path": "placeholder/files"
+    },
     "version" : 1.0
 }

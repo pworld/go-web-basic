@@ -13,7 +13,7 @@ const (
 )
 
 // Interface for different level severity
-type DataLogger interface {
+type Logger interface {
 	Trace(string)
 	Tracef(string, ...interface{})
 

@@ -18,7 +18,7 @@ func RegisterDefaultServices() {
 	})
 
 	// Creates Log Services
-	err = RegisterSingleton(func(appConfig config.Config) logs.DataLogger {
+	err = RegisterSingleton(func(appConfig config.Config) logs.Logger {
 		return logs.NewDefaultLog(appConfig)
 	})
 	if err != nil {
